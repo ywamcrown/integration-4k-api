@@ -195,9 +195,9 @@ class JSON_API_Query {
       return false;
     }
 	
-    if (preg_match('/^[a-zA-Z_]+$/', $json)) {
+    if (preg_match('/^[0-9a-zA-Z_]+$/', $json)) {
       return $this->get_legacy_controller($json);
-    } else if (preg_match('/^([a-zA-Z_]+)(\/|\.)[a-zA-Z_]+$/', $json, $matches)) {
+    } else if (preg_match('/^([0-9a-zA-Z_]+)(\/|\.)[0-9a-zA-Z_]+$/', $json, $matches)) {
       return $matches[1];
     } else {
       return 'core';

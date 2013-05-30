@@ -4,7 +4,7 @@ Controller name: Overlay
 Controller description: User Functions via Json
 */
 
-class JSON_API_Omegazones_Controller {
+class JSON_API_4k_Controller {
 
  
 

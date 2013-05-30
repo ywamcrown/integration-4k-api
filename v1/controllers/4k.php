@@ -5,7 +5,6 @@ Controller description: User Functions via Json
 */
 
 class JSON_API_4k_Controller {
-
  
 
 public function findOZByAddress() { 
@@ -13,7 +12,9 @@ public function findOZByAddress() {
   
 }
  
+//http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/
 
+//http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
 public function findOZbyCountryName(){ 
   global $json_api;
   $output = array();
@@ -41,9 +42,31 @@ public function findOZbyCountryName(){
 
 }
 
-public function findOZByWorldType(){ }
+public function findOZByWorldType(){
+  global $json_api;
+  $output = array();
 
-public function findOZbyName() { }
+   extract($json_api->query->get(array('world')));
+   if(isset($world)){ 
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+             $data = array(
+            'where' => "World='".$world."'", 
+            'f' => 'json', 
+            'returnGeometry' => 'false'
+            );
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+            // Getting results
+        $result =  curl_exec($ch); // Getting jSON result string
+            
+        return $result;
+}else  $json_api->error("World Type not defined.");
+
+ }
+
+public function findOZbyZoneName() { }
 
 public function FindOzByWorldID() { }
 

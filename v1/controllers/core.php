@@ -6,8 +6,6 @@ Controller description: Basic introspection methods
 
 class JSON_API_Core_Controller {
   
- 
-  
   public function info() {
 
     global $json_api;

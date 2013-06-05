@@ -2,7 +2,7 @@
 
 /*
 Version: 13.5.1
-Version Description: May 2013 1.0
+Version Description: May 2013 1.0.0
 */
 define('CHARSET','utf8');
 define(MAPSERVER,'http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query');

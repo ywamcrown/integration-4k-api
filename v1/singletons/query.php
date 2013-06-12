@@ -156,8 +156,11 @@ class JSON_API_Query {
      //$wp_query_var = $this->wp_query_var($key);
    
 <<<<<<< HEAD
+<<<<<<< HEAD
     if ($wp_query_var) {
          // return $wp_query_var;
+=======
+>>>>>>> 1225ab8ab4385940c591643029a77431b059dac9
 =======
 >>>>>>> 1225ab8ab4385940c591643029a77431b059dac9
    if ($query_var) {

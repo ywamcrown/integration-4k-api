@@ -15,9 +15,9 @@ class JSON_API_4k_Controller {
 
     extract($json_api->query->get(array('lat','lng')));  //extract parameters from URL 
 
-    if(isset($lat) && isset($lng)){ //Checking if parameters exist
+    if(isset($lat) && isset($lng)){
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); //References for curl_setopt http://us1.php.net/manual/en/function.curl-setopt.php
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
       curl_setopt($ch, CURLOPT_POST, true);
       curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query 
         $data = array(
@@ -48,21 +48,21 @@ class JSON_API_4k_Controller {
   public function findOzbyCountryName(){ 
     global $json_api;
 
-    extract($json_api->query->get(array('country')));
+    extract($json_api->query->get(array('country')));  //extract parameters from URL 
 
     if(isset($country)){ 
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
       curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query
         $data = array(
           'where' => "Cnty_Name='".$country."'",
           'f' => 'json',
           'returnGeometry' => 'false'
-        );
+        );  //Preparing parameters for MAPSERVER.  Details of parameters - http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
               // Getting results
-      $result =  curl_exec($ch); // Getting JSON result string
+      $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
       curl_close($ch);        
       return $result;
     }else $json_api->error("Country not defined.");
@@ -75,21 +75,21 @@ class JSON_API_4k_Controller {
   public function findOzByWorldType(){
     global $json_api;
 
-    extract($json_api->query->get(array('world')));
+    extract($json_api->query->get(array('world')));  //extract parameters from URL 
 
     if(isset($world)){ 
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
       curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query
         $data = array(
           'where' => "World='".$world."'",
           'f' => 'json',
           'returnGeometry' => 'false'
-        );
+        );  //Preparing parameters for MAPSERVER.  Details of parameters - http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
               // Getting results
-      $result =  curl_exec($ch); // Getting jSON result string
+      $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
       curl_close($ch);
       return $result;
     }else $json_api->error("World Type not defined.");
@@ -102,21 +102,21 @@ class JSON_API_4k_Controller {
   public function findOzByZoneName() {
     global $json_api;
     
-    extract($json_api->query->get(array('zone')));
+    extract($json_api->query->get(array('zone')));  //extract parameters from URL 
 
     if(isset($zone)){
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
       curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query
         $data = array(
           'where' => "Zone_Name='".$zone."'",
           'f' => 'json',
           'returnGeometry' => 'false'
-        );
+        );  //Preparing parameters for MAPSERVER.  Details of parameters - http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
               // Getting results
-      $result =  curl_exec($ch); // Getting jSON result string
+      $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
       curl_close($ch);
       return $result;
     }else $json_api->error("Zone not defined.");
@@ -129,21 +129,21 @@ class JSON_API_4k_Controller {
   public function findOzByWorldID() {
     global $json_api;
 
-    extract($json_api->query->get(array('world_id')));
+    extract($json_api->query->get(array('world_id')));  //extract parameters from URL 
 
     if(isset($world_id)){
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
       curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query
         $data = array(
           'where' => "WorldID='".$world_id."'",
           'f' => 'json',
           'returnGeometry' => 'false'
-        );
+        );  //Preparing parameters for MAPSERVER.  Details of parameters - http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
               // Getting results
-      $result =  curl_exec($ch); // Getting jSON result string
+      $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
       curl_close($ch);
       return $result;
     }else $json_api->error("World ID not defined.");
@@ -156,19 +156,19 @@ class JSON_API_4k_Controller {
   public function findTotalOz() {
 
     $ch = curl_init();
-  	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);  //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
   	curl_setopt($ch, CURLOPT_POST, true);
-  	curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+  	curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query
       $data = array(
   			'where' => 'Offers>=0',
   			'f' => 'json',
   			'returnGeometry' => 'false',
   			'returnDistinctValues' => 'true',
   			'returnCountOnly' =>'true'
-   		);
+   		);  //Preparing parameters for MAPSERVER.  Details of parameters - http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
     curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
               // Getting results
-    $result =  curl_exec($ch); // Getting jSON result string
+    $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
     curl_close($ch);
     return $result;
   }  

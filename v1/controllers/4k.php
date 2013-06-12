@@ -6,93 +6,171 @@ Controller description: User Functions via Json
 
 class JSON_API_4k_Controller {
  
+  /*
+  Find Omega Zone by Address
+  */
+  public function findOzByAddress() { 
+  //http://maps.googleapis.com/maps/api/geocode/json?address=Brasilia&sensor=true
+    global $json_api;
 
-public function findOZByAddress() { 
-//http://maps.googleapis.com/maps/api/geocode/json?address=Brasilia&sensor=true
-  
-}
- 
-//http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/
+    extract($json_api->query->get(array('lat','lng')));  //extract parameters from URL 
+
+    if(isset($lat) && isset($lng)){ //Checking if parameters exist
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); //References for curl_setopt http://us1.php.net/manual/en/function.curl-setopt.php
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query 
+        $data = array(
+          'geometry' => $lat.", ".$lng,
+          'f' => 'json',
+          'geometryType' => 'esriGeometryPoint',
+          'returnGeometry' => 'false'
+        );  //Preparing parameters for MAPSERVER.  Details of parameters - http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+      $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
+      curl_close($ch);
+
+      return $result;
+    }elseif (!isset($lat) && isset($lng)){
+      $json_api->error("Latitue not defined.");
+    }elseif (!isset($lng) && isset($lat)){
+      $json_api->error("Longitude not defined.");
+    }else $json_api->error("Addres not defined."); 
+  }
+
+//http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMaptruea/MapServer/2/
 
 //http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
-public function findOZbyCountryName(){ 
-  global $json_api;
-  $output = array();
 
-   extract($json_api->query->get(array('country')));
+  /*
+  Find Omega Zone by Country Name
+  */
+  public function findOzbyCountryName(){ 
+    global $json_api;
 
-   if(isset($country)){ 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_URL, MAPSERVER);
-             $data = array(
-            'where' => "Cnty_Name='".$country."'", 
-            'f' => 'json', 
-            'returnGeometry' => 'false'
-            );
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            // Getting results
-        $result =  curl_exec($ch); // Getting jSON result string
-            
-        return $result;
-}else  $json_api->error("Country not defined.");
-  
-  
+    extract($json_api->query->get(array('country')));
 
+    if(isset($country)){ 
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+        $data = array(
+          'where' => "Cnty_Name='".$country."'",
+          'f' => 'json',
+          'returnGeometry' => 'false'
+        );
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+              // Getting results
+      $result =  curl_exec($ch); // Getting JSON result string
+      curl_close($ch);        
+      return $result;
+    }else $json_api->error("Country not defined.");
+  }
+
+
+  /*
+  Find Omega Zone by World Type
+  */
+  public function findOzByWorldType(){
+    global $json_api;
+
+    extract($json_api->query->get(array('world')));
+
+    if(isset($world)){ 
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+        $data = array(
+          'where' => "World='".$world."'",
+          'f' => 'json',
+          'returnGeometry' => 'false'
+        );
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+              // Getting results
+      $result =  curl_exec($ch); // Getting jSON result string
+      curl_close($ch);
+      return $result;
+    }else $json_api->error("World Type not defined.");
+  }
+
+
+  /*
+  Find Omega Zone by Omega zone name
+  */
+  public function findOzByZoneName() {
+    global $json_api;
+    
+    extract($json_api->query->get(array('zone')));
+
+    if(isset($zone)){
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+        $data = array(
+          'where' => "Zone_Name='".$zone."'",
+          'f' => 'json',
+          'returnGeometry' => 'false'
+        );
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+              // Getting results
+      $result =  curl_exec($ch); // Getting jSON result string
+      curl_close($ch);
+      return $result;
+    }else $json_api->error("Zone not defined.");
+  }
+
+
+  /*
+  Find Omega Zone by World ID
+  */
+  public function findOzByWorldID() {
+    global $json_api;
+
+    extract($json_api->query->get(array('world_id')));
+
+    if(isset($world_id)){
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+        $data = array(
+          'where' => "WorldID='".$world_id."'",
+          'f' => 'json',
+          'returnGeometry' => 'false'
+        );
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+              // Getting results
+      $result =  curl_exec($ch); // Getting jSON result string
+      curl_close($ch);
+      return $result;
+    }else $json_api->error("World ID not defined.");
+  }
+
+
+  /*
+  Find total number of Omega Zone
+  */
+  public function findTotalOz() {
+
+    $ch = curl_init();
+  	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  	curl_setopt($ch, CURLOPT_POST, true);
+  	curl_setopt($ch, CURLOPT_URL, MAPSERVER);
+      $data = array(
+  			'where' => 'Offers>=0',
+  			'f' => 'json',
+  			'returnGeometry' => 'false',
+  			'returnDistinctValues' => 'true',
+  			'returnCountOnly' =>'true'
+   		);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+              // Getting results
+    $result =  curl_exec($ch); // Getting jSON result string
+    curl_close($ch);
+    return $result;
+  }  
 }
-
-public function findOZByWorldType(){
-  global $json_api;
-  $output = array();
-
-   extract($json_api->query->get(array('world')));
-   if(isset($world)){ 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_URL, MAPSERVER);
-             $data = array(
-            'where' => "World='".$world."'", 
-            'f' => 'json', 
-            'returnGeometry' => 'false'
-            );
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            // Getting results
-        $result =  curl_exec($ch); // Getting jSON result string
-            
-        return $result;
-}else  $json_api->error("World Type not defined.");
-
- }
-
-public function findOZbyZoneName() { }
-
-public function FindOzByWorldID() { }
-
-
-public function findTotalOZ() {
-
-        $ch = curl_init();
-			  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			  curl_setopt($ch, CURLOPT_POST, 1);
-			  curl_setopt($ch, CURLOPT_URL, MAPSERVER);
-             $data = array(
-				    'where' => 'Offers>=0', 
-				    'f' => 'json', 
-				    'returnGeometry' => 'false',
-				    'returnDistinctValues' => 'true',
-				    'returnCountOnly' =>'true'
- 				  );
-  			curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            // Getting results
-        $result =  curl_exec($ch); // Getting jSON result string
-            
-        return $result;
-
-    }  
-  
- 
-}
-
 ?>

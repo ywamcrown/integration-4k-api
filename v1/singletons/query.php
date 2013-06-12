@@ -155,9 +155,9 @@ class JSON_API_Query {
     $query_var = (isset($_REQUEST[$key])) ? $_REQUEST[$key] : null;
      //$wp_query_var = $this->wp_query_var($key);
    
-    if ($wp_query_var) {
-          return $wp_query_var;
-    } else if ($query_var) {
+    //if ($wp_query_var) {
+         // return $wp_query_var;
+    if ($query_var) {
        return $this->strip_magic_quotes($query_var);
     } else if (isset($this->defaults[$key])) {
        return $this->defaults[$key];

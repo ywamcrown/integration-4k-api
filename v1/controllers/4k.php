@@ -35,7 +35,7 @@ class JSON_API_4k_Controller {
       $json_api->error("Latitue not defined.");
     }elseif (!isset($lng) && isset($lat)){
       $json_api->error("Longitude not defined.");
-    }else $json_api->error("Addres not defined."); 
+    }else $json_api->error("Address not defined."); 
   }
 
 //http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMaptruea/MapServer/2/

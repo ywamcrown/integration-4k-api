@@ -10,6 +10,7 @@ class JSON_API_4k_Controller {
   Find Omega Zone by Address
   */
   public function findOzByAddress() {
+    //peter is the man
   //http://maps.googleapis.com/maps/api/geocode/json?address=Brasilia&sensor=true
     global $json_api;
     define('GoogleMAPSERVER','http://maps.googleapis.com/maps/api/geocode/json');

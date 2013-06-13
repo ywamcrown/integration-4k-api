@@ -9,10 +9,39 @@ class JSON_API_4k_Controller {
   /*
   Find Omega Zone by Address
   */
-  public function findOzByAddress() { 
+  public function findOzByAddress() {
   //http://maps.googleapis.com/maps/api/geocode/json?address=Brasilia&sensor=true
     global $json_api;
+    define('GoogleMAPSERVER','http://maps.googleapis.com/maps/api/geocode/json');
+    extract($json_api->query->get(array('address', 'sensor')));
 
+    if(isset($address)){
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_URL, GoogleMAPSERVER);
+
+// echo "address is " . $address;
+// echo "sensor is " . $sensor;
+    //$data = "sensor=true";
+      $data = ''; 
+        $data = array(
+          //'address' => "'".$address."'",
+          'sensor' => true
+          
+        );
+//var_dump($data);
+
+//print_r($data);
+        
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+      $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
+      curl_close($ch);
+      return $result;
+
+    }
+
+/*
     extract($json_api->query->get(array('lat','lng')));  //extract parameters from URL 
 
     if(isset($lat) && isset($lng)){
@@ -36,6 +65,8 @@ class JSON_API_4k_Controller {
     }elseif (!isset($lng) && isset($lat)){
       $json_api->error("Longitude not defined.");
     }else $json_api->error("Addres not defined."); 
+
+*/
   }
 
 //http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMaptruea/MapServer/2/

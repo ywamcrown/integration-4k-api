@@ -9,6 +9,7 @@ class JSON_API_Query {
   );
   
   function __construct() {
+
     // Register JSON API query vars
     //add_filter('query_vars', array(&$this, 'query_vars'));
   }
@@ -144,27 +145,25 @@ class JSON_API_Query {
 
   }
   function get($key) {
+
      if (is_array($key)) {
       $result = array();
       foreach ($key as $k) {
         $result[$k] = $this->get($k);
       }
       return $result;
-    }
-	//print_r($_REQUEST);
+   }
     $query_var = (isset($_REQUEST[$key])) ? $_REQUEST[$key] : null;
-     //$wp_query_var = $this->wp_query_var($key);
-   
-    if ($wp_query_var) {
-          return $wp_query_var;
-    } else if ($query_var) {
+  
+   if ($query_var) {
        return $this->strip_magic_quotes($query_var);
     } else if (isset($this->defaults[$key])) {
        return $this->defaults[$key];
     } else {
        return null;
-    }
+     
   }
+}
   
   function __get($key) {
     return $this->get($key);
@@ -195,9 +194,9 @@ class JSON_API_Query {
       return false;
     }
 	
-    if (preg_match('/^[a-zA-Z_]+$/', $json)) {
+    if (preg_match('/^[0-9a-zA-Z_]+$/', $json)) {
       return $this->get_legacy_controller($json);
-    } else if (preg_match('/^([a-zA-Z_]+)(\/|\.)[a-zA-Z_]+$/', $json, $matches)) {
+    } else if (preg_match('/^([0-9a-zA-Z_]+)(\/|\.)[0-9a-zA-Z_]+$/', $json, $matches)) {
       return $matches[1];
     } else {
       return 'core';
@@ -283,8 +282,7 @@ class JSON_API_Query {
   }
   
  
-	function http_response($url, $status = null, $wait = 3) 
-{ 
+	function http_response($url, $status = null, $wait = 3) { 
     
 		
             // we are the parent 
@@ -327,3 +325,4 @@ class JSON_API_Query {
     }   
 
 }
+?>

@@ -5,8 +5,9 @@ Version: 13.5.1
 Version Description: May 2013 1.0
 */
 define('CHARSET','utf8');
-define(MAPSERVER,'http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query');
+define('MAPSERVER','http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query');
   
+
    function json_api_dir() {
   if (defined('JSON_API_DIR') && file_exists(JSON_API_DIR)) {
     return JSON_API_DIR;
@@ -56,9 +57,7 @@ function json_api_rewrites() {
 @include_once "$dir/singletons/api.php";
 @include_once "$dir/singletons/query.php";
 @include_once "$dir/singletons/introspector.php";
-@include_once "$dir/singletons/pods.php";
-@include_once "$dir/singletons/tktdump.php";
-@include_once "$dir/singletons/response.php";
+ @include_once "$dir/singletons/response.php";
 @include_once "$dir/models/post.php";
 @include_once "$dir/models/comment.php";
 @include_once "$dir/models/category.php";
@@ -66,6 +65,7 @@ function json_api_rewrites() {
 @include_once "$dir/models/author.php";
 @include_once "$dir/models/attachment.php";
  
- json_api_init();
+
+  json_api_init();
   $json_api->template_redirect();
 ?>

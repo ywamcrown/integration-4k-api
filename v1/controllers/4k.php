@@ -12,68 +12,95 @@ class JSON_API_4k_Controller {
   public function findOzByAddress() {
     //peter is the man
   //http://maps.googleapis.com/maps/api/geocode/json?address=Brasilia&sensor=true
-    global $json_api;
-    define('GoogleMAPSERVER','http://maps.googleapis.com/maps/api/geocode/json');
-    extract($json_api->query->get(array('address', 'sensor')));
-
-    if(isset($address)){
+    function findLocation($string){
+ 
+      $string = str_replace (" ", "+", urlencode($string));
+      $details_url = "http://maps.googleapis.com/maps/api/geocode/json?address=".$string."&sensor=false";
+     
       $ch = curl_init();
-      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
-      curl_setopt($ch, CURLOPT_POST, true);
-      curl_setopt($ch, CURLOPT_URL, GoogleMAPSERVER);
+      curl_setopt($ch, CURLOPT_URL, $details_url);
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      $response = json_decode(curl_exec($ch), true);
+   
+     // If Status Code is ZERO_RESULTS, OVER_QUERY_LIMIT, REQUEST_DENIED or INVALID_REQUEST
+      if ($response['status'] != 'OK') {
+        return null;
+      }
+ 
+      //print_r($response);
+      $geometry = $response['results'][0]['geometry'];
+   
+      $longitude = $geometry['location']['lng'];
+      $latitude = $geometry['location']['lat'];
 
-// echo "address is " . $address;
-// echo "sensor is " . $sensor;
-    //$data = "sensor=true";
-      $data = ''; 
-        $data = array(
-          //'address' => "'".$address."'",
-          'sensor' => true
-          
-        );
-//var_dump($data);
-
-//print_r($data);
-        
-      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-      $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
+      $array = array(
+          'latitude' => $geometry['location']['lat'],
+          'longitude' => $geometry['location']['lng'],
+          'location_type' => $geometry['location_type'],
+      );   
       curl_close($ch);
-      return $result;
-
+      return $array;
     }
 
-/*
-    extract($json_api->query->get(array('lat','lng')));  //extract parameters from URL 
-
-    if(isset($lat) && isset($lng)){
+    function findZone($longitude, $latitude){
       $ch = curl_init();
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
       curl_setopt($ch, CURLOPT_POST, true);
       curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query 
         $data = array(
-          'geometry' => $lat.", ".$lng,
+          'geometry' => $latitude.", ".$longitude,
           'f' => 'json',
           'geometryType' => 'esriGeometryPoint',
           'returnGeometry' => 'false'
         );  //Preparing parameters for MAPSERVER.  Details of parameters - http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
       curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-      $result =  curl_exec($ch); // Getting JSON result string from MAPSERVER
+      $response = json_decode(curl_exec($ch), true);
       curl_close($ch);
+      //print_r($response);
+      return $response; 
+    }
 
-      return $result;
-    }elseif (!isset($lat) && isset($lng)){
-      $json_api->error("Latitue not defined.");
-    }elseif (!isset($lng) && isset($lat)){
-      $json_api->error("Longitude not defined.");
-<<<<<<< HEAD
-    }else $json_api->error("Addres not defined."); 
 
-*/
-=======
-    }else $json_api->error("Address not defined."); 
->>>>>>> 536d7ec0cd321d6bd209e643ad0ecae810f0e93f
+    global $json_api;
+    extract($json_api->query->get(array('address')));
+ 
+    $location = findLocation($address);
+
+    $latitude = $location['latitude'];
+    $longitude = $location['longitude'];
+
+    $zone = findzone($latitude, $longitude);
+    return $zone;
+
+
+}
+
+
+public function findOzByLocation () {
+
+  global $json_api;
+
+  extract($json_api->query->get(array('latitude', 'longitude'))); 
+
+  if(isset($latitude) && ($longitude)){
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); //References for curl_setopt - http://us1.php.net/manual/en/function.curl-setopt.php
+      curl_setopt($ch, CURLOPT_POST, true);
+      curl_setopt($ch, CURLOPT_URL, MAPSERVER);  //MAPSERVER is defined in index.php as http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMap1a/MapServer/2/query 
+        $data = array(
+          'geometry' => $longitude.", ".$latitude,
+          'f' => 'json',
+          'geometryType' => 'esriGeometryPoint',
+          'returnGeometry' => 'false'
+        );  //Preparing parameters for MAPSERVER.  Details of parameters - http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
+      curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+      $response = json_decode(curl_exec($ch), true);
+      curl_close($ch);
+      //print_r($response);
+      return $response;
   }
-
+}
+  
 //http://maps.mapfactory.org/ArcGIS/rest/services/YWAM/4kWorldMaptruea/MapServer/2/
 
 //http://mapservices.nps.gov/arcgis/sdk/rest/index.html?query.html
